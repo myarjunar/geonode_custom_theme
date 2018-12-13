@@ -9,7 +9,8 @@ try:
     from geonode_custom_theme.local_settings import *
 except ImportError:
     # Load from current settings file
-    settings_file = 'scanterra.settings'
+    settings_file = os.environ.get(
+        'DJANGO_SETTINGS_MODULE', 'geonode.settings')
     if settings_file not in sys.modules:
         current_settings = importlib.import_module(settings_file)
         sys.modules[settings_file] = current_settings
@@ -25,7 +26,12 @@ except ImportError:
 PROJECT_NAME = 'geonode_custom_theme'
 
 if PROJECT_NAME not in INSTALLED_APPS:
-    INSTALLED_APPS.append(PROJECT_NAME)
+    INSTALLED_APPS += (PROJECT_NAME, )
+
+# Location of url mappings
+ROOT_URLCONF = os.getenv('ROOT_URLCONF', '{}.urls'.format(PROJECT_NAME))
+
+WSGI_APPLICATION = "{}.wsgi.application".format(PROJECT_NAME)
 
 # Defines the directory that contains the settings file as the _LOCAL_ROOT
 # It is used for relative settings elsewhere.
@@ -44,12 +50,17 @@ _LOCALE_DIR = os.path.join(_LOCAL_ROOT, 'locale')
 _TEMPLATE_DIR = os.path.join(_LOCAL_ROOT, 'templates')
 
 # Prioritize custom translations
-if hasattr(current_settings, 'LOCALE_PATHS'):
-    LOCALE_PATHS = list(LOCALE_PATHS)
-    LOCALE_PATHS.insert(0, _LOCALE_DIR)
+LOCALE_PATHS = list(LOCALE_PATHS)
+LOCALE_PATHS.insert(0, _LOCALE_DIR)
 
 # Prioritize custom theme
 template_dirs = list(TEMPLATES[0]['DIRS'])
 template_dirs.insert(0, _TEMPLATE_DIR)
 
 TEMPLATES[0]['DIRS'] = template_dirs
+
+# Add custom template context processors
+context_processors = list(TEMPLATES[0]['OPTIONS']['context_processors'])
+context_processors += ['geonode_custom_theme.context_processors.custom_theme']
+
+TEMPLATES[0]['OPTIONS']['context_processors'] = context_processors

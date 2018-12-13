@@ -18,4 +18,18 @@
 #
 #########################################################################
 
-default_app_config = "geonode_custom_theme.apps.AppConfig"
+from django.conf.urls import url, include
+from django.views.generic import TemplateView
+
+from geonode.urls import urlpatterns
+
+urlpatterns += [
+## include your urls here
+
+]
+
+urlpatterns = [
+   url(r'^/?$',
+       TemplateView.as_view(template_name='site_index.html'),
+       name='home'),
+ ] + urlpatterns
