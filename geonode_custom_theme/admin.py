@@ -1,9 +1,14 @@
 from django.contrib import admin
+
+from geonode_custom_theme.admin_actions import enable_theme, disable_theme
 from .models import AdvancedGeoNodeThemeCustomization
 
 @admin.register(AdvancedGeoNodeThemeCustomization)
 class AdvancedGeoNodeThemeCustomizationAdmin(admin.ModelAdmin):
     fieldsets = (
+        (None ,{
+            'fields': ('name', )
+        }),
         ('Body', {
             'fields': ('body_bg', 'body_color')
         }),
@@ -17,7 +22,7 @@ class AdvancedGeoNodeThemeCustomizationAdmin(admin.ModelAdmin):
         }),
         ('Big Search', {
             'fields': (
-                'big_search_bg', 'big_search_title_text_color', 'big_search_search_icon_color',
+                'big_search_bg', 'big_search_color', 'big_search_title_text_color', 'big_search_search_icon_color',
                 'big_search_hyperlink_text_color')
         }),
         ('Datasets', {
@@ -30,6 +35,13 @@ class AdvancedGeoNodeThemeCustomizationAdmin(admin.ModelAdmin):
                 'showcase_button_color', 'showcase_button_text_color')
         }),
         ('Footer', {
-            'fields': ('copyright_logo', )
+            'fields': ('footer_bg', 'copyright_logo')
+        }),
+        ('Components', {
+            'fields': ('primary_button_color', )
         })
     )
+
+    list_display = ('id', 'is_enabled', 'name', 'date', 'description')
+    list_display_links = ('id', 'name',)
+    actions = [enable_theme, disable_theme]
