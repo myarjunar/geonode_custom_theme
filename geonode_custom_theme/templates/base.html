@@ -31,6 +31,37 @@
 
       <style type="text/css">
         /* Additional styles by custom themes */
+
+        .navbar .container {
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+
+        .navbar-nav .search .fa-search {
+          top: 12px;
+          left: 12px;
+        }
+
+        .navbar-nav .search input {
+          height: 40px;
+        }
+
+        .home .big-search .search .fa-search {
+          top: 3px;
+        }
+
+        .home .big-search .search input {
+          border: 1px solid #ccc;
+        }
+
+        .home .big-search p {
+          margin: 10px 0px 5px 0px;
+        }
+
+        .home .big-search {
+          padding-bottom: 1em;
+        }
+
         {% if custom_theme.primary_button_color %}
         .btn-primary {
           background-color: {{ custom_theme.primary_button_color }};
@@ -38,6 +69,20 @@
 
         nav.filter h4 {
           background: {{ custom_theme.primary_button_color }};
+        }
+        {% endif %}
+
+        {% if custom_theme.primary_button_hover_color %}
+        .btn-primary:hover {
+          background-color: {{ custom_theme.primary_button_hover_color }};
+        }
+
+        .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+          background-color: {{ custom_theme.primary_button_hover_color }};
+        }
+
+        .navbar-nav .dropdown-menu {
+          background-color: {{ custom_theme.primary_button_hover_color }};
         }
         {% endif %}
 
@@ -59,6 +104,12 @@
           background-repeat: no-repeat;
           background-position: center;
           background-size: cover;
+        }
+        {% endif %}
+
+        {% if custom_theme.navbar_hover_color %}
+        .navbar-inverse .navbar-nav > li > a:hover {
+          background-color: {{ custom_theme.navbar_hover_color }};
         }
         {% endif %}
 
@@ -84,30 +135,10 @@
         {% endif %}
 
         {% if custom_theme.jumbotron_bg %}
-        /*.home .jumbotron .container {*/
-          /*position: relative;*/
-          /*z-index: 1;*/
-        /*}*/
-        /*.home .jumbotron:after {*/
-          /*content: "";*/
-          /*background-image: url({{ custom_theme.jumbotron_bg.url }});*/
-          /*background-repeat: no-repeat;*/
-          /*background-position: center;*/
-          /*background-size: cover;*/
-          /*{% if not custom_theme.jumbotron_welcome_hide %}*/
-          /*opacity: 0.5;*/
-          /*{% endif %}*/
-          /*top: 0;*/
-          /*left: 0;*/
-          /*bottom: 0;*/
-          /*right: 0;*/
-          /*position: absolute;*/
-          /*z-index: 0;*/
-        /*}*/
         .home .jumbotron {
           background-image: url({{ custom_theme.jumbotron_bg.url }});
           background-repeat: no-repeat;
-          background-position: center;
+          background-position: initial;
           background-size: cover;
         }
         {% endif %}
@@ -119,15 +150,71 @@
         }
         {% endif %}
 
+        {% if custom_theme.big_search_search_icon_color %}
+        .home .big-search .search .fa-search {
+            color: {{ custom_theme.big_search_search_icon_color }};
+        }
+        {% endif %}
+
+        {% if custom_theme.big_search_hyperlink_text_color %}
+        .home .big-search .btn-default {
+            color: {{ custom_theme.big_search_hyperlink_text_color }};
+        }
+        {% endif %}
+
+        {% if custom_theme.datasets_title_text_color %}
+        .home #datasets h1 {
+          color: {{ custom_theme.datasets_title_text_color }};
+        }
+        {% endif %}
+
         {% if custom_theme.datasets_icon_color %}
-        .home #datasets a .category:hover {
+        .home #datasets a .category {
           color: {{ custom_theme.datasets_icon_color }};
+        }
+        {% endif %}
+
+        {% if custom_theme.datasets_icon_hover_color %}
+        .home #datasets a .category:hover {
+          color: {{ custom_theme.datasets_icon_hover_color }};
         }
         {% endif %}
 
         {% if custom_theme.showcase_icon_color %}
         .home-facets i {
           color: {{ custom_theme.showcase_icon_color }}
+        }
+        {% endif %}
+
+        {% if custom_theme.showcase_icon_title_color %}
+        .home-facets a {
+          color: {{ custom_theme.showcase_icon_title_color }}
+        }
+        {% endif %}
+
+        {% if custom_theme.showcase_sub_text_color %}
+        .home-facets p {
+          color: {{ custom_theme.showcase_sub_text_color }}
+        }
+        {% endif %}
+
+        {% if custom_theme.showcase_button_text_color %}
+        .home-facets p a{
+          color: {{ custom_theme.showcase_button_text_color }}
+        }
+        {% endif %}
+
+        {% if custom_theme.showcase_icon_hover_color %}
+        .home-facets i:hover,
+        .home-facets a:hover,
+        .home-facets p a:hover{
+          color: {{ custom_theme.showcase_icon_hover_color }}
+        }
+        {% endif %}
+
+        {% if custom_theme.showcase_button_color %}
+        .home-facets .btn{
+          background-color: {{ custom_theme.showcase_button_color }}
         }
         {% endif %}
 
@@ -413,6 +500,20 @@
           {% endblock contactus %}
           {% if custom_theme.copyright_logo %}
           <a class="copyright-logo" href="/"></a>
+          {% endif %}
+          <label class="hidden">{% trans "Language" %}</label>
+          {% if csrf_token != "NOTPROVIDED" %}
+          {% get_current_language as LANGUAGE %}
+          <form class="form-inline" action="/i18n/setlang/" method="post">
+          {% csrf_token %}
+            <select class="col-md-6 pull-right" name="language" onchange="javascript:form.submit()">
+              {% for lang in LANGUAGES %}
+              <option value="{{ lang.0 }}" {% ifequal LANGUAGE_CODE lang.0 %} selected="selected"{% endifequal %}>
+                {{ lang.1 }}
+              </option>
+              {% endfor %}
+            </select>
+          </form>
           {% endif %}
         </div>
       </div>
