@@ -99,11 +99,21 @@
         {% endif %}
 
         {% if custom_theme.navbar_bg %}
-        .layers .navbar-inverse {
+        body:not(.home) > .navbar-inverse {
           background-image: url({{ custom_theme.navbar_bg.url }});
           background-repeat: no-repeat;
           background-position: center;
           background-size: cover;
+        }
+        {% endif %}
+
+        {% if custom_theme.navbar_bg_shadow %}
+        body:not(.home) > .navbar-inverse {
+          box-shadow: inset 2000px 0 0 0 {{ custom_theme.navbar_bg_shadow }};
+        }
+
+        footer {
+          box-shadow: inset 2000px 0 0 0 {{ custom_theme.navbar_bg_shadow }};
         }
         {% endif %}
 
